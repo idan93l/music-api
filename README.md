@@ -1,13 +1,31 @@
 # 🎵 Music API – Final DevOps Project  
 ### *(Phase 1: Dockerization + Phase 2: Kubernetes)*
 
-This repository contains **Idan’s Music API**, a musical-themed web application built as the Final DevOps Engineer Course Project.  
-It demonstrates real-world DevOps skills across both phases:
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-Deployed-brightgreen)
+![Build](https://img.shields.io/badge/CI-Pending-lightgrey)
 
-- **Phase 1** – Python Flask + Docker + Docker Hub + Compose  
-- **Phase 2** – Kubernetes (Deployment, Service, HPA, ConfigMap, Secret, CronJob, Probes)
+---
 
-This README thoroughly documents everything needed for setup, evaluation, and deployment.
+## 👋 Welcome
+
+Welcome!  
+This repository is part of my **DevOps Engineering course final project**.
+
+It demonstrates an end‑to‑end DevOps workflow:
+
+- Python Flask microservice  
+- Docker containerization  
+- Docker Hub publishing  
+- Kubernetes Deployment + Service  
+- Autoscaling with HPA  
+- Environment configuration via ConfigMap & Secret  
+- Scheduled tasks using CronJob  
+- Liveness & Readiness probes  
+- Thorough documentation  
+
+The project is still **in progress**, improving as the course continues.
 
 ---
 
@@ -35,440 +53,288 @@ music-api/
 
 # 🎯 Phase 1 — Dockerization
 
-Phase 1 requires:
+Phase 1 includes:
 
-- Python Flask application  
-- “Hello World” endpoint  
-- Dockerfile  
-- docker-compose  
-- Building/pushing image to Docker Hub  
-- Documentation  
-
-Below is everything required and more.
+- A Python Flask application  
+- A “Hello World” (or better) endpoint  
+- Dockerfile creation  
+- docker-compose setup  
+- Docker Hub image publishing  
+- Local environment documentation  
 
 ---
 
-## 🎹 Application Overview (Flask)
+## 🎹 Flask Application Overview
 
-The application exposes several music-related endpoints:
-
-### `GET /`
-Returns a friendly greeting using ConfigMap values:
-
+### ✔ `GET /`
 ```
 🎶 This is Idan's Music API. Ready to Rock? 🎸
 ```
 
-### `GET /beat`
-Returns a randomized drum pattern:
+### ✔ `GET /beat`
+Random rhythm generator.
 
-```json
-{
-  "bpm": 120,
-  "steps": 12,
-  "hit_probability": 0.6,
-  "pattern": [1,0,1,1,0,0,1,0,1,0,1,1]
-}
-```
+### ✔ `GET /chord`
+Generates a chord based on music theory.
 
-### `GET /chord`
-Random chord with theory rules (major/minor/7th/sus/etc.).
+### ✔ `GET /scale`
+Returns a random scale or mode.
 
-### `GET /scale`
-Random musical scale or mode (Ionian, Dorian, Phrygian, Pentatonic, Blues, etc.).
+### ✔ `GET /progression`
+Chord progression generator.
 
-### `GET /progression`
-Generates a chord progression in a random key.
+### ✔ `GET /health`
+Used for Kubernetes probes.
 
-### `GET /health`
-Used for Kubernetes liveness/readiness probes.
-
-### `GET /config`
-Shows live configuration derived from ConfigMap & Secret.
+### ✔ `GET /config`
+Shows configuration from ConfigMap + Secret.
 
 ---
 
-# 🧪 Running Locally (Python)
-
-### 1. Create virtual environment
+## 🧪 Running Locally (Python)
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-```
-
-### 2. Install dependencies
-
-```bash
 pip install -r requirements.txt
-```
-
-### 3. Run
-
-```bash
 python app.py
 ```
 
-### 4. Test
+Test via browser or curl:
 
-```text
+```
 http://localhost:5000/
 http://localhost:5000/beat
 http://localhost:5000/chord
 http://localhost:5000/scale
 http://localhost:5000/progression
-http://localhost:5000/config
-http://localhost:5000/health
 ```
 
 ---
 
-# 🐳 Phase 1 — Running with Docker
+# 🐳 Docker (Phase 1)
 
-### Build the image
+### Build image
 
 ```bash
-docker build -t bourree90s/music-api:v1 .
+docker build -t bourree90s/music-api:v3 .
 ```
-
-(You can also build `v2`, `v3`, etc.)
 
 ### Run container
 
 ```bash
-docker run --rm -p 5000:5000 bourree90s/music-api:v1
-```
-
-Open: `http://localhost:5000/`
-
----
-
-## 🐳 Docker Hub
-
-Image repository:
-
-```text
-docker.io/bourree90s/music-api
-```
-
-Latest version used in Kubernetes:
-
-```text
-docker.io/bourree90s/music-api:v3
-```
-
-Pull from Docker Hub:
-
-```bash
-docker pull bourree90s/music-api:v3
 docker run --rm -p 5000:5000 bourree90s/music-api:v3
 ```
 
+### Docker Hub
+
+```
+docker.io/bourree90s/music-api:v3
+```
+
+Pull it:
+
+```bash
+docker pull bourree90s/music-api:v3
+```
+
 ---
 
-# 🐚 Running with docker-compose
+# 🐚 docker-compose
 
-The project includes a `docker-compose.yml` file.
-
-### Start
+Start:
 
 ```bash
 docker-compose up
 ```
 
-### Stop
+Stop:
 
 ```bash
 docker-compose down
 ```
 
-This is useful for local development with a single command.
-
 ---
 
-# 🚀 Phase 2 — Kubernetes Deployment
+# 🚀 Phase 2 — Kubernetes
 
-Phase 2 requires:
+Phase 2 includes:
 
 - Deployment  
 - Service  
-- Horizontal Pod Autoscaler  
+- HPA autoscaler  
 - ConfigMap  
 - Secret  
 - CronJob  
 - Probes  
 - Documentation  
 
-Everything is implemented in the `k8s/` directory.
+All manifests live inside `k8s/`.
 
 ---
 
-# 📦 Kubernetes Manifests
+# 🏗 Architecture Diagram
 
-All Kubernetes resources live in the `k8s/` folder.
+```
+                 ┌──────────────────────┐
+                 │   Music API (Flask)  │
+                 │  🎶 /beat /scale ... │
+                 └──────────┬───────────┘
+                            │ Dockerfile
+                            ▼
+                   Docker Image (v3)
+                            │
+                            ▼
+               ┌─────────────────────────┐
+               │      Kubernetes         │
+               │                         │
+               │  Deployment (2 pods)    │
+               │  Service (NodePort)     │
+               │  HPA (autoscaler)       │
+               │  ConfigMap + Secret     │
+               │  CronJob (curl task)    │
+               │  Liveness/Readiness     │
+               └─────────────────────────┘
+                            │
+                            ▼
+               Access via `minikube service`
+```
 
-## 1. ConfigMap (`k8s/configmap.yaml`)
+---
 
-Provides non-secret configuration:
+# 📦 Kubernetes Components
+
+## 1. ConfigMap
+
+Provides non-secret config:
 
 ```yaml
 APP_NAME: "Idan's Music API"
 DEFAULT_BPM: "120"
 ```
 
-These values are injected into the container as environment variables.
+## 2. Secret
 
----
-
-## 2. Secret (`k8s/secret.yaml`)
-
-Opaque secret with Base64-encoded values:
+Base64‑encoded:
 
 ```yaml
 SECRET_TOKEN: c3VwZXItc2VjcmV0LXRva2Vu
 ```
 
-This is mounted as an environment variable in the container and used by the `/config` endpoint.
+## 3. Deployment
 
----
+Uses:
 
-## 3. Deployment (`k8s/deployment.yaml`)
-
-Key properties:
-
-- `apiVersion: apps/v1`
-- `kind: Deployment`
-- Name: `music-api-deployment`
-- **Image:** `bourree90s/music-api:v3`
-- Replicas: `2`
-- Labels: `app: music-api`
-- Uses ConfigMap and Secret for environment variables
-- Defines liveness & readiness probes
-
-Example relevant section:
-
-```yaml
-containers:
-  - name: music-api
-    image: bourree90s/music-api:v3
-    ports:
-      - containerPort: 5000
-    env:
-      - name: APP_NAME
-        valueFrom:
-          configMapKeyRef:
-            name: music-api-config
-            key: APP_NAME
-      - name: DEFAULT_BPM
-        valueFrom:
-          configMapKeyRef:
-            name: music-api-config
-            key: DEFAULT_BPM
-      - name: SECRET_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: music-api-secret
-            key: SECRET_TOKEN
-    livenessProbe:
-      httpGet:
-        path: /health
-        port: 5000
-      initialDelaySeconds: 10
-      periodSeconds: 15
-    readinessProbe:
-      httpGet:
-        path: /health
-        port: 5000
-      initialDelaySeconds: 5
-      periodSeconds: 10
+```
+image: bourree90s/music-api:v3
 ```
 
----
+Includes:
 
-## 4. Service (`k8s/service.yaml`)
+- 2 replicas  
+- ConfigMap + Secret env  
+- Liveness probe  
+- Readiness probe  
 
-Exposes the application inside and outside the cluster:
+## 4. Service
 
-- `type: NodePort`
-- Cluster port: `5000`
-- NodePort: `30080`
-- Selector: `app: music-api`
+NodePort:
 
-This allows external access via the Minikube node IP and port 30080, or via `minikube service`.
+```
+5000 → 30080
+```
 
----
+## 5. HPA
 
-## 5. Horizontal Pod Autoscaler (`k8s/hpa.yaml`)
+Autoscaler:
 
-The HPA automatically scales the Deployment based on CPU utilization:
+- min: 1  
+- max: 5  
+- CPU target: 50%  
 
-- Min replicas: `1`
-- Max replicas: `5`
-- Target CPU utilization: `50%`
+## 6. CronJob
 
-It watches the `music-api-deployment` and adjusts the number of pods as load changes (assuming metrics-server is installed in the cluster).
+Runs every 5 minutes:
 
----
-
-## 6. CronJob (`k8s/cronjob.yaml`)
-
-A Kubernetes CronJob that runs every 5 minutes:
-
-- Image: `curlimages/curl`
-- Command: `curl` to `http://music-api-service:5000/progression`
-- Demonstrates scheduled/background work in Kubernetes
-
-This is useful for periodic tasks such as logging or triggering side effects.
+- Uses curl image  
+- Calls `/progression`  
 
 ---
 
-# 🌐 Deploying to Kubernetes (Minikube Example)
+# 🌐 Deploying to Kubernetes
 
-### 1. Start Minikube
+### Start Minikube
 
 ```bash
 minikube start
 ```
 
-### 2. Apply ConfigMap and Secret
+### Apply manifests
 
 ```bash
 kubectl apply -f k8s/configmap.yaml
 kubectl apply -f k8s/secret.yaml
-```
-
-### 3. Apply Deployment and Service
-
-```bash
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
-```
-
-### 4. Apply HPA and CronJob
-
-```bash
 kubectl apply -f k8s/hpa.yaml
 kubectl apply -f k8s/cronjob.yaml
 ```
 
-### 5. Verify all resources
-
-```bash
-kubectl get pods
-kubectl get svc
-kubectl get hpa
-kubectl get cronjob
-```
-
-You should see:
-
-- Pods from `music-api-deployment`
-- `music-api-service` with type `NodePort`
-- `music-api-hpa`
-- `music-api-cronjob`
-
----
-
-## Accessing the Service
-
-The recommended way with Minikube:
+### Access service
 
 ```bash
 minikube service music-api-service --url
 ```
 
-This prints a URL like:
+---
 
-```text
-http://127.0.0.1:49160
+# 🔍 Probes
+
+### Liveness
+```
+GET /health
 ```
 
-Open that URL in a browser or with `curl`:
-
-```bash
-curl http://127.0.0.1:49160/
-curl http://127.0.0.1:49160/beat
-curl http://127.0.0.1:49160/scale
-curl http://127.0.0.1:49160/config
-curl http://127.0.0.1:49160/health
+### Readiness
 ```
-
-The root endpoint should respond with something like:
-
-```text
-🎶 This is Idan's Music API. Ready to Rock? 🎸
+GET /health
 ```
 
 ---
 
-# 🔍 Health Probes
+# 🧭 Versioning
 
-The Deployment defines the following probes:
+| Version | Description |
+|--------|-------------|
+| v1 | Initial build |
+| v2 | Expanded music logic + config |
+| v3 | Stable full version deployed to Kubernetes |
 
-### Liveness Probe
+Deployment uses:
 
-Checks that the container is still running correctly:
-
-```yaml
-livenessProbe:
-  httpGet:
-    path: /health
-    port: 5000
-  initialDelaySeconds: 10
-  periodSeconds: 15
 ```
-
-### Readiness Probe
-
-Checks that the application is ready to receive traffic:
-
-```yaml
-readinessProbe:
-  httpGet:
-    path: /health
-    port: 5000
-  initialDelaySeconds: 5
-  periodSeconds: 10
-```
-
-These are crucial for reliable rolling updates and stability in Kubernetes.
-
----
-
-# 🧭 Versioning Strategy
-
-Each meaningful change in the application results in a new Docker image tag:
-
-- `v1` – Initial Dockerized version  
-- `v2` – Extended musical features and configuration  
-- `v3` – Stable final image used in Kubernetes (fixed `/beat`, emojis, `/config`, etc.)
-
-The Deployment uses:
-
-```yaml
 image: bourree90s/music-api:v3
 ```
-
-This is the version expected to be deployed in the cluster.
 
 ---
 
 # 🏁 Conclusion
 
-This project demonstrates the full DevOps lifecycle:
+This project demonstrates:
 
-- ✅ Python Flask application development  
-- ✅ Docker containerization and image publishing  
-- ✅ docker-compose for local orchestration  
-- ✅ Kubernetes Deployment & Service  
-- ✅ Horizontal Pod Autoscaling (HPA)  
-- ✅ ConfigMap & Secret management  
-- ✅ CronJob for scheduled tasks  
-- ✅ Liveness & Readiness probes  
-- ✅ Clear, end-to-end documentation for both Phase 1 and Phase 2  
+- Python Flask microservice  
+- Docker packaging + Docker Hub publishing  
+- docker-compose orchestration  
+- Kubernetes Deployment  
+- NodePort Service  
+- Horizontal Pod Autoscaler  
+- ConfigMap / Secret configuration  
+- CronJob scheduling  
+- Health probes  
+- Full documentation  
 
-It fully satisfies the requirements for the **Final DevOps Engineer Course Project** (Phases 1 + 2), while adding a fun and practical musical theme.
+A complete DevOps workflow, built step‑by‑step.
 
 ---
 
-🎉 **Enjoy, extend, and rock on!** 🎸
+🎸 **Rock on!**
