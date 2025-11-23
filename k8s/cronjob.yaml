@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: music-api-cronjob
+spec:
+  schedule: "*/5 * * * *"  # every 5 minutes
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: curl-music-api
+              image: curlimages/curl:8.8.0
+              args:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Calling /progression at $(date)";
+                  curl -s http://music-api-service:5000/progression || echo "Request failed";
+          restartPolicy: OnFailure

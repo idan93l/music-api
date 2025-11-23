@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: music-api-config
+data:
+  APP_NAME: "Idan's Music API"
+  DEFAULT_BPM: "120"

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: music-api-deployment
+  labels:
+    app: music-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: music-api
+  template:
+    metadata:
+      labels:
+        app: music-api
+    spec:
+      containers:
+        - name: music-api
+          image: bourree90s/music-api:v3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          env:
+            - name: APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: music-api-config
+                  key: APP_NAME
+            - name: DEFAULT_BPM
+              valueFrom:
+                configMapKeyRef:
+                  name: music-api-config
+                  key: DEFAULT_BPM
+            - name: SECRET_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: music-api-secret
+                  key: SECRET_TOKEN
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
