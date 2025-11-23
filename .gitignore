@@ -1,0 +1,49 @@
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# Pip cache
+pip-wheel-metadata/
+*.log
+
+# -----------------------------
+# VSCode / IDEs
+# -----------------------------
+.vscode/
+.idea/
+*.swp
+
+# -----------------------------
+# Docker
+# -----------------------------
+*.tar
+docker-compose.override.yml
+
+# -----------------------------
+# Kubernetes
+# -----------------------------
+# (No generated files, just ignore accidental local dumps)
+*.yaml~
+*.yml~
+*.tmp
+
+# -----------------------------
+# OS files
+# -----------------------------
+.DS_Store
+Thumbs.db
