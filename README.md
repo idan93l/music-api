@@ -218,7 +218,7 @@ DEFAULT_BPM: "120"
 Base64‑encoded:
 
 ```yaml
-SECRET_TOKEN: c3VwZXItc2VjcmV0LXRva2Vu
+SECRET_TOKEN: d2F2ZXRhYmxlLW9wZXJhdG9yLWFuYWxvZy1zaW1wbGVy
 ```
 
 ## 3. Deployment
