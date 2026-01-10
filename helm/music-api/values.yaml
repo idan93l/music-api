@@ -5,9 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: idan93l/music-api
+  repository: bourree90s/music-api
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "0.3"
 
 imagePullSecrets: []
 nameOverride: ""
