@@ -1,145 +1,78 @@
-# 🎵 Music API – Final DevOps Project
-### *(Phase 1: Dockerization · Phase 2: Kubernetes · Phase 3: Helm & CI/CD Ready)*
 
-![Python](https://img.shields.io/badge/Python-3.12-blue)
-![Docker](https://img.shields.io/badge/Docker-Ready-blue)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-Deployed-brightgreen)
-![Helm](https://img.shields.io/badge/Helm-Deployed-blueviolet)
-![CI](https://img.shields.io/badge/Jenkins-Ready-orange)
+# User Management
 
----
+User Management app based on existing data
 
-## 👋 Welcome
+## Tech Used
 
-Welcome!  
-This repository is part of my **DevOps Engineering course final project**.
+ReactJS, NodeJS, Express, MongoDB, Mongoose, MaterialUI, Styled-Components, Axios, React-Router-Dom, HTML, CSS, VanillaJS.
+## Screenshots
 
-It demonstrates an end-to-end DevOps workflow:
+Home Page - /header
 
-- Python Flask microservice
-- Docker containerization
-- Docker Hub publishing
-- Kubernetes Deployment + Service
-- Health checks (Liveness & Readiness)
-- Helm-based Kubernetes packaging
-- CI/CD-ready deployment workflow
+![App Screenshot](https://i.postimg.cc/Dfd2BZQd/Header.png)
 
-The project evolves gradually across course phases.
 
----
+Customers Table - /customers
 
-# 📁 Project Structure
+![App Screenshot](https://i.postimg.cc/d1WKc75z/customers.png)
 
-```
-music-api/
-│
-├── app.py                     # Flask application
-├── requirements.txt           # Dependencies
-├── Dockerfile                 # Container image definition
-├── docker-compose.yml         # Local Docker orchestration
-├── README.md                  # Documentation
-│
-├── k8s/                       # Raw Kubernetes manifests (Phase 2)
-│   ├── configmap.yaml
-│   ├── secret.yaml
-│   ├── deployment.yaml
-│   ├── service.yaml
-│   ├── hpa.yaml
-│   └── cronjob.yaml
-│
-└── helm/                      # Helm chart (Phase 3)
-    └── music-api/
-        ├── Chart.yaml
-        ├── values.yaml
-        └── templates/
-            ├── deployment.yaml
-            ├── service.yaml
-            ├── ingress.yaml
-            ├── httproute.yaml
-            ├── serviceaccount.yaml
-            └── _helpers.tpl
+
+Customer Page - /customer/:id
+
+![App Screenshot](https://i.postimg.cc/RZ0s2PkV/customer.png)
+
+
+## API Reference
+
+#### Get all users
+
+```http
+  GET /users
 ```
 
-> ℹ️ The `k8s/` directory is kept for learning and comparison.  
-> **Helm is the preferred deployment method from Phase 3 onward.**
 
----
+#### Get user
 
-# 🎯 Phase 1 — Dockerization
+```http
+  GET /:id
+```
 
-Phase 1 includes:
+#### Find user and update "isActive" field
 
-- Python Flask application
-- Dockerfile creation
-- docker-compose setup
-- Docker Hub image publishing
-- Local development documentation
+```http
+  post /:id
+```
 
----
 
-## 🎹 Flask Application Overview
+## Run Locally
 
-### ✔ `GET /`
-🎶 This is Music API, Ready to Rock? 🎸
-
-### ✔ `GET /beat`
-Random rhythm generator.
-
-### ✔ `GET /chord`
-Generates a chord based on music theory.
-
-### ✔ `GET /scale`
-Returns a random scale or mode.
-
-### ✔ `GET /progression`
-Chord progression generator.
-
-### ✔ `GET /health`
-Health endpoint used for Kubernetes probes.
-
-### ✔ `GET /config`
-Shows application configuration.
-
----
-
-## 🧪 Running Locally (Python)
+Clone the project
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python app.py
+  git clone https://link-to-project
 ```
 
----
-
-# 🐳 Docker (Phase 1)
+Go to the project directory
 
 ```bash
-docker build -t bourree90s/music-api:0.3 .
-docker run --rm -p 5000:5000 bourree90s/music-api:0.3
+  cd my-project
 ```
 
----
-
-# 🚀 Phase 3 — Helm
+Install dependencies
 
 ```bash
-minikube start
-helm upgrade --install music-api-test helm/music-api
-minikube service music-api-test
+  npm install
 ```
 
----
-
-# 🤖 CI/CD Ready
-
-Deployment command used by CI/CD:
+Start the server
 
 ```bash
-helm upgrade --install music-api-test helm/music-api
+  npm run server
 ```
 
----
+Start the client
 
-🎸 **Rock on!**
+```bash
+  npm start
+```
