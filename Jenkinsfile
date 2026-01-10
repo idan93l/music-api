@@ -20,6 +20,20 @@ pipeline {
             }
         }
 
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-bourree90s',
+                    usernameVariable: 'DOCKERHUB_USER',
+                    passwordVariable: 'DOCKERHUB_TOKEN'
+                )]) {
+                    sh '''
+                        echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USER" --password-stdin
+                    '''
+                }
+            }
+        }
+
         stage('Push Docker Image') {
             steps {
                 sh 'docker push $IMAGE_NAME:$IMAGE_TAG'
@@ -32,4 +46,12 @@ pipeline {
             }
         }
     }
+
+    post {
+        always {
+            // optional: reduce risk of leaving auth around on the agent
+            sh 'docker logout || true'
+        }
+    }
 }
+
