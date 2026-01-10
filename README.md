@@ -1,78 +1,154 @@
+# 🎵 Music API – Final DevOps Project
+### *(Phase 1: Dockerization · Phase 2: Kubernetes · Phase 3: Helm & CI/CD Ready)*
 
-# User Management
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-Deployed-brightgreen)
+![Helm](https://img.shields.io/badge/Helm-Deployed-blueviolet)
+![CI](https://img.shields.io/badge/Jenkins-Ready-orange)
 
-User Management app based on existing data
+---
 
-## Tech Used
+## 👋 Welcome
 
-ReactJS, NodeJS, Express, MongoDB, Mongoose, MaterialUI, Styled-Components, Axios, React-Router-Dom, HTML, CSS, VanillaJS.
-## Screenshots
+Welcome!  
+This repository is part of my **DevOps Engineering course final project**.
 
-Home Page - /header
+It demonstrates an end-to-end DevOps workflow:
 
-![App Screenshot](https://i.postimg.cc/Dfd2BZQd/Header.png)
+- Python Flask microservice
+- Docker containerization
+- Docker Hub publishing
+- Kubernetes Deployment + Service
+- Health checks (Liveness & Readiness)
+- Helm-based Kubernetes packaging
+- Jenkins CI/CD pipeline
 
+---
 
-Customers Table - /customers
+# 📁 Project Structure
 
-![App Screenshot](https://i.postimg.cc/d1WKc75z/customers.png)
-
-
-Customer Page - /customer/:id
-
-![App Screenshot](https://i.postimg.cc/RZ0s2PkV/customer.png)
-
-
-## API Reference
-
-#### Get all users
-
-```http
-  GET /users
+```
+music-api/
+│
+├── app.py                     # Flask application
+├── requirements.txt           # Dependencies
+├── Dockerfile                 # Container image definition
+├── docker-compose.yml         # Local Docker orchestration
+├── Jenkinsfile                # CI/CD pipeline
+├── README.md                  # Documentation
+│
+├── k8s/                       # Raw Kubernetes manifests (Phase 2)
+│   ├── configmap.yaml
+│   ├── secret.yaml
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── hpa.yaml
+│   └── cronjob.yaml
+│
+└── helm/                      # Helm chart (Phase 3)
+    └── music-api/
+        ├── Chart.yaml
+        ├── values.yaml
+        └── templates/
+            ├── deployment.yaml
+            ├── service.yaml
+            ├── ingress.yaml
+            ├── httproute.yaml
+            ├── serviceaccount.yaml
+            └── _helpers.tpl
 ```
 
+---
 
-#### Get user
+# 🎯 Phase 1 — Dockerization
 
-```http
-  GET /:id
-```
-
-#### Find user and update "isActive" field
-
-```http
-  post /:id
-```
-
-
-## Run Locally
-
-Clone the project
+- Flask microservice
+- Dockerfile
+- docker-compose
+- Docker Hub publishing
 
 ```bash
-  git clone https://link-to-project
+docker build -t bourree90s/music-api:0.3 .
+docker run --rm -p 5000:5000 bourree90s/music-api:0.3
 ```
 
-Go to the project directory
+---
+
+# 🚀 Phase 2 — Kubernetes
+
+Phase 2 uses raw Kubernetes manifests (`k8s/`):
+
+- Deployment
+- Service
+- ConfigMap & Secret
+- Health probes
+- HPA
+- CronJob
 
 ```bash
-  cd my-project
+kubectl apply -f k8s/
 ```
 
-Install dependencies
+---
+
+# 🧩 Phase 3 — Helm
+
+Helm is used as the **primary deployment method**.
 
 ```bash
-  npm install
+minikube start
+helm upgrade --install music-api-test helm/music-api
+minikube service music-api-test
 ```
 
-Start the server
+### Health Checks
+
+```
+GET /health
+```
+
+---
+
+# 🤖 CI/CD — Jenkins
+
+This project includes a **Jenkinsfile** implementing a CI/CD pipeline.
+
+Pipeline stages:
+1. Checkout code
+2. Build Docker image
+3. Push image to Docker Hub
+4. Deploy to Kubernetes using Helm
+
+Key deployment command:
 
 ```bash
-  npm run server
+helm upgrade --install music-api-test helm/music-api
 ```
 
-Start the client
+---
 
-```bash
-  npm start
-```
+# 🧭 Versioning
+
+| Version | Description |
+|--------|-------------|
+| v1 | Flask + Docker |
+| v2 | Kubernetes manifests |
+| v3 | Helm + Jenkins pipeline |
+
+---
+
+# 🏁 Conclusion
+
+This project demonstrates a complete DevOps workflow:
+
+- Dockerized Flask service
+- Kubernetes deployment
+- Helm packaging
+- Jenkins CI/CD automation
+- Health monitoring
+- Clear documentation
+
+---
+
+🎸 **Rock on!**
