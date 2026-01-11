@@ -2,15 +2,14 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME  = "bourree90s/music-api"
-        IMAGE_TAG   = "0.3"
+        IMAGE_NAME = "bourree90s/music-api"
+        IMAGE_TAG  = "0.3"
 
-        // IMPORTANT: make Jenkins use THIS kubeconfig (Windows path)
-        KUBECONFIG  = "C:\\ProgramData\\Jenkins\\.kube\\config"
+        // Use forward slashes for bash on Windows
+        KUBECONFIG = "C:/ProgramData/Jenkins/.kube/config"
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -25,8 +24,12 @@ pipeline {
 
         stage('Docker Login') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-bourree90s', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_TOKEN')]) {
-                    sh 'echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USER --password-stdin'
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-bourree90s',
+                    usernameVariable: 'DOCKERHUB_USER',
+                    passwordVariable: 'DOCKERHUB_TOKEN'
+                )]) {
+                    sh 'echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USER" --password-stdin'
                 }
             }
         }
